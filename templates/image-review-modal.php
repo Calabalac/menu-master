@@ -50,7 +50,7 @@
         </section>
         
         <footer class="modal-card-foot">
-            <button class="button is-success" id="cm-keep-remote">
+                            <button class="btn btn-success" id="cm-keep-remote">
                 <?php _e('Use New Image', 'catalog-master'); ?>
             </button>
             <button class="button" id="cm-keep-local">

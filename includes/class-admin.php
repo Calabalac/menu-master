@@ -236,20 +236,20 @@ class MenuMaster_Admin {
     public function admin_page_catalogs() {
         // Handle messages
         if (isset($_GET['deleted'])) {
-            echo '<div class="notification is-success"><p>Menu deleted successfully.</p></div>';
+            echo '<div class="notification success"><p>Menu deleted successfully.</p></div>';
         }
         if (isset($_GET['error'])) {
-            echo '<div class="notification is-danger"><p>An error occurred.</p></div>';
+            echo '<div class="notification error"><p>An error occurred.</p></div>';
         }
         
         $catalogs = MenuMaster_Database::get_catalogs();
         global $wpdb;
         ?>
-        <div class="menu-master-admin">
+        <div class="menu-master-wrap">
             <div class="menu-master-header">
                 <h1>🍽️ Menu Master</h1>
                 <div class="header-actions">
-                    <a href="<?php echo admin_url('admin.php?page=menu-master-add'); ?>" class="button is-primary">
+                    <a href="<?php echo admin_url('admin.php?page=menu-master-add'); ?>" class="btn btn-primary">
                         ➕ Create New Menu
                     </a>
                     <div class="theme-switch">
@@ -272,7 +272,7 @@ class MenuMaster_Admin {
                 </div>
             </div>
             
-            <div class="menu-master-content">
+            <div>
                 <?php if (empty($catalogs)): ?>
                     <div class="menu-master-card text-center">
                         <h2>Welcome to Menu Master! 🎉</h2>
@@ -291,7 +291,7 @@ class MenuMaster_Admin {
                                 <div class="stats-label">Beautiful Display</div>
                             </div>
                         </div>
-                        <a href="<?php echo admin_url('admin.php?page=menu-master-add'); ?>" class="button is-primary is-large">
+                        <a href="<?php echo admin_url('admin.php?page=menu-master-add'); ?>" class="btn btn-primary btn-lg">
                             🚀 Create Your First Menu
                         </a>
                     </div>
@@ -335,11 +335,11 @@ class MenuMaster_Admin {
                     
                     <!-- Menus Table -->
                     <div class="menu-master-card">
-                        <div class="d-flex justify-between align-center mb-2">
+                        <div class="flex justify-between items-center mb-2">
                             <h2 class="mb-0">Your Menus</h2>
-                            <div class="d-flex align-center gap-1">
-                                <input type="text" id="search-menus" class="input" placeholder="Search menus..." style="width: 200px;">
-                                <select id="filter-menus" class="select">
+                            <div class="flex items-center gap-4">
+                                <input type="text" id="search-menus" class="form-input" placeholder="Search menus..." style="width: 200px;">
+                                <select id="filter-menus" class="form-select">
                                     <option value="">All Menus</option>
                                     <option value="connected">Connected to Sheets</option>
                                     <option value="local">Local Only</option>
@@ -348,7 +348,7 @@ class MenuMaster_Admin {
                         </div>
                         
                         <div class="table-container">
-                            <table class="table">
+                            <table class="data-table">
                                 <thead>
                                     <tr>
                                         <th>Menu Name</th>
@@ -371,10 +371,10 @@ class MenuMaster_Admin {
                                         ?>
                                         <tr class="menu-row" data-name="<?php echo esc_attr(strtolower($catalog->name)); ?>" data-connected="<?php echo $is_connected ? 'true' : 'false'; ?>">
                                             <td>
-                                                <div class="d-flex align-center gap-1">
+                                                <div class="flex items-center gap-3">
                                                     <strong><?php echo esc_html($catalog->name); ?></strong>
                                                     <?php if ($is_connected): ?>
-                                                        <span class="tag is-success is-small">📊 Connected</span>
+                                                        <span class="tag success">📊 Connected</span>
                                                     <?php endif; ?>
                                                 </div>
                                             </td>
@@ -382,11 +382,11 @@ class MenuMaster_Admin {
                                                 <?php echo esc_html($catalog->description ?: 'No description'); ?>
                                             </td>
                                             <td>
-                                                <span class="tag is-info"><?php echo $item_count ?: 0; ?></span>
+                                                <span class="tag primary"><?php echo $item_count ?: 0; ?></span>
                                             </td>
                                             <td>
                                                 <?php if ($is_connected): ?>
-                                                    <span class="tag is-success">🔗 Connected</span>
+                                                    <span class="tag success">🔗 Connected</span>
                                                 <?php else: ?>
                                                     <span class="tag">📝 Local</span>
                                                 <?php endif; ?>
@@ -395,18 +395,18 @@ class MenuMaster_Admin {
                                                 <?php echo date('M j, Y', strtotime($catalog->created_at)); ?>
                                             </td>
                                             <td>
-                                                <div class="d-flex gap-1">
+                                                <div class="flex gap-2">
                                                     <a href="<?php echo admin_url('admin.php?page=menu-master-edit&id=' . $catalog->id); ?>" 
-                                                       class="button is-small is-primary">
+                                                       class="btn btn-sm btn-primary">
                                                         ✏️ Edit
                                                     </a>
                                                     <?php if ($item_count > 0): ?>
-                                                        <button class="button is-small is-success" 
+                                                        <button class="btn btn-sm btn-success" 
                                                                 onclick="downloadImages(<?php echo $catalog->id; ?>, '<?php echo esc_js($catalog->name); ?>')">
                                                             🖼️ Download Images
                                                         </button>
                                                     <?php endif; ?>
-                                                    <button class="button is-small is-danger" 
+                                                    <button class="btn btn-sm btn-danger" 
                                                             onclick="deleteCatalog(<?php echo $catalog->id; ?>, '<?php echo esc_js($catalog->name); ?>')">
                                                         🗑️
                                                     </button>
@@ -473,7 +473,7 @@ class MenuMaster_Admin {
     
     public function admin_page_add_catalog() {
         ?>
-        <div class="wrap menu-master-admin">
+        <div class="wrap menu-master-wrap">
             <div class="add-catalog-header">
                 <h1>🆕 Create New Menu</h1>
                 <p class="add-catalog-subtitle">Create a new menu to manage your items from Google Sheets</p>
@@ -1136,7 +1136,7 @@ class MenuMaster_Admin {
         $mappings = MenuMaster_Database::get_column_mapping($catalog_id);
         $items_count = MenuMaster_Database::get_catalog_items_count($catalog_id);
         ?>
-        <div class="wrap menu-master-admin menu-master-glass">
+        <div class="wrap menu-master-wrap menu-master-glass">
             <h1><?php echo esc_html($catalog->name); ?> <small>(ID: <?php echo $catalog->id; ?>)</small></h1>
             
             <div class="menu-master-tabs">
@@ -2077,7 +2077,7 @@ class MenuMaster_Admin {
         
         <style>
         /* New Styles for Tabs and General Layout */
-        .menu-master-admin {
+        .menu-master-wrap {
             max-width: 1200px;
             margin: 20px auto;
             background: #f0f2f5;
@@ -2086,7 +2086,7 @@ class MenuMaster_Admin {
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
-        .menu-master-admin h1 {
+        .menu-master-wrap h1 {
             font-size: 2.5em;
             color: #333;
             margin-bottom: 20px;
@@ -2934,7 +2934,7 @@ document.getElementById("mm-github-update-btn").addEventListener("click", functi
      */
     public function admin_page_import_preview() {
         ?>
-        <div class="menu-master-admin">
+        <div class="menu-master-wrap">
             <div class="menu-master-header">
                 <h1>📊 Import Preview</h1>
                 <div class="header-actions">
@@ -2971,9 +2971,9 @@ document.getElementById("mm-github-update-btn").addEventListener("click", functi
                         </div>
                         
                         <div class="field">
-                            <button type="submit" class="button is-primary is-large">
-                                📊 Preview Import
-                            </button>
+                                                <button type="submit" class="btn btn-primary btn-lg">
+                        📊 Preview Import
+                    </button>
                         </div>
                     </form>
                 </div>
@@ -3148,14 +3148,14 @@ document.getElementById("mm-github-update-btn").addEventListener("click", functi
         });
         
         ?>
-        <div class="menu-master-admin">
+        <div class="menu-master-wrap">
             <div class="menu-master-header">
                 <div class="header-content">
                     <h1>🖼️ Image Manager</h1>
                     <p class="text-muted">Manage your menu images</p>
                 </div>
                 <div class="header-actions">
-                    <button class="button is-primary" onclick="location.reload()">
+                    <button class="btn btn-primary" onclick="location.reload()">
                         🔄 Refresh
                     </button>
                     <div class="theme-switch">
@@ -3178,12 +3178,12 @@ document.getElementById("mm-github-update-btn").addEventListener("click", functi
                 </div>
             </div>
             
-            <div class="menu-master-content">
+            <div>
                 <?php if (empty($images)): ?>
                     <div class="menu-master-card text-center">
                         <h2>No Images Found</h2>
                         <p class="text-muted">Images will appear here after you import menus with image URLs and download them.</p>
-                        <a href="<?php echo admin_url('admin.php?page=menu-master'); ?>" class="button is-primary">
+                        <a href="<?php echo admin_url('admin.php?page=menu-master'); ?>" class="btn btn-primary">
                             📋 Go to Menus
                         </a>
                     </div>
@@ -3244,9 +3244,9 @@ document.getElementById("mm-github-update-btn").addEventListener("click", functi
                                     </select>
                                 </div>
                             </div>
-                            <div class="d-flex align-center gap-2">
-                                <input type="text" id="search-images" class="input" placeholder="Search images..." style="width: 200px;">
-                                <select id="sort-images" class="select">
+                            <div class="flex items-center gap-4">
+                                <input type="text" id="search-images" class="form-input" placeholder="Search images..." style="width: 200px;">
+                                <select id="sort-images" class="form-select">
                                     <option value="newest">Newest First</option>
                                     <option value="oldest">Oldest First</option>
                                     <option value="name">Name A-Z</option>
@@ -3257,7 +3257,7 @@ document.getElementById("mm-github-update-btn").addEventListener("click", functi
                         
                         <!-- Table View -->
                         <div class="image-table-view">
-                            <table class="table">
+                            <table class="data-table">
                                 <thead>
                                     <tr>
                                         <th>Preview</th>
@@ -3283,17 +3283,17 @@ document.getElementById("mm-github-update-btn").addEventListener("click", functi
                                                 <?php echo date('M j, Y H:i', $image['modified']); ?>
                                             </td>
                                             <td>
-                                                <div class="d-flex gap-1">
-                                                    <button class="button is-small copy-url-btn" data-url="<?php echo esc_attr($image['url']); ?>">
+                                                <div class="flex gap-2">
+                                                    <button class="btn btn-sm copy-url-btn" data-url="<?php echo esc_attr($image['url']); ?>">
                                                         📋 Copy
                                                     </button>
-                                                    <button class="button is-small rename-btn" data-filename="<?php echo esc_attr($image['name']); ?>">
+                                                    <button class="btn btn-sm rename-btn" data-filename="<?php echo esc_attr($image['name']); ?>">
                                                         ✏️ Rename
                                                     </button>
-                                                    <button class="button is-small download-btn" data-url="<?php echo esc_attr($image['url']); ?>" data-filename="<?php echo esc_attr($image['name']); ?>">
+                                                    <button class="btn btn-sm download-btn" data-url="<?php echo esc_attr($image['url']); ?>" data-filename="<?php echo esc_attr($image['name']); ?>">
                                                         ⬇️ Download
                                                     </button>
-                                                    <button class="button is-small is-danger delete-btn" data-filename="<?php echo esc_attr($image['name']); ?>">
+                                                    <button class="btn btn-sm btn-danger delete-btn" data-filename="<?php echo esc_attr($image['name']); ?>">
                                                         🗑️ Delete
                                                     </button>
                                                 </div>
@@ -3311,10 +3311,10 @@ document.getElementById("mm-github-update-btn").addEventListener("click", functi
                                     <img src="<?php echo esc_url($image['url']); ?>" alt="<?php echo esc_attr($image['name']); ?>">
                                     <div class="image-name"><?php echo esc_html($image['name']); ?></div>
                                     <div class="image-actions">
-                                        <button class="button is-small copy-url-btn" data-url="<?php echo esc_attr($image['url']); ?>">📋</button>
-                                        <button class="button is-small rename-btn" data-filename="<?php echo esc_attr($image['name']); ?>">✏️</button>
-                                        <button class="button is-small download-btn" data-url="<?php echo esc_attr($image['url']); ?>" data-filename="<?php echo esc_attr($image['name']); ?>">⬇️</button>
-                                        <button class="button is-small is-danger delete-btn" data-filename="<?php echo esc_attr($image['name']); ?>">🗑️</button>
+                                        <button class="btn btn-sm copy-url-btn" data-url="<?php echo esc_attr($image['url']); ?>">📋</button>
+                                        <button class="btn btn-sm rename-btn" data-filename="<?php echo esc_attr($image['name']); ?>">✏️</button>
+                                        <button class="btn btn-sm download-btn" data-url="<?php echo esc_attr($image['url']); ?>" data-filename="<?php echo esc_attr($image['name']); ?>">⬇️</button>
+                                        <button class="btn btn-sm btn-danger delete-btn" data-filename="<?php echo esc_attr($image['name']); ?>">🗑️</button>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
@@ -3361,10 +3361,10 @@ document.getElementById("mm-github-update-btn").addEventListener("click", functi
                     </form>
                 </div>
                 <div class="modal-card-foot">
-                    <button type="submit" form="upload-form" class="button is-primary">
+                    <button type="submit" form="upload-form" class="btn btn-primary">
                         📤 Upload
                     </button>
-                    <button class="button" id="cancel-upload">Cancel</button>
+                    <button class="btn btn-secondary" id="cancel-upload">Cancel</button>
                 </div>
             </div>
         </div>
@@ -3386,7 +3386,7 @@ document.getElementById("mm-github-update-btn").addEventListener("click", functi
                                 <label class="label">Image URL</label>
                                 <div class="control d-flex gap-1">
                                     <input type="text" id="image-url" class="input" readonly>
-                                    <button class="button" id="copy-url">📋 Copy</button>
+                                    <button class="btn btn-secondary" id="copy-url">📋 Copy</button>
                                 </div>
                             </div>
                             
@@ -3403,8 +3403,8 @@ document.getElementById("mm-github-update-btn").addEventListener("click", functi
                     </div>
                 </div>
                 <div class="modal-card-foot">
-                    <button class="button is-danger" id="delete-image">🗑️ Delete</button>
-                    <button class="button" id="close-image-details">Close</button>
+                    <button class="btn btn-danger" id="delete-image">🗑️ Delete</button>
+                    <button class="btn btn-secondary" id="close-image-details">Close</button>
                 </div>
             </div>
         </div>
@@ -3516,9 +3516,9 @@ document.getElementById("mm-github-update-btn").addEventListener("click", functi
                             <div class="image-item-name">${image.name}</div>
                             <div class="image-item-size">${image.size}</div>
                             <div class="image-item-actions">
-                                <button class="button is-small" onclick="viewImage(${image.id})">👁️ View</button>
-                                <button class="button is-small" onclick="copyImageUrl('${image.url}')">📋 Copy</button>
-                                <button class="button is-small is-danger" onclick="deleteImage(${image.id})">🗑️</button>
+                                <button class="btn btn-sm" onclick="viewImage(${image.id})">👁️ View</button>
+                                <button class="btn btn-sm" onclick="copyImageUrl('${image.url}')">📋 Copy</button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteImage(${image.id})">🗑️</button>
                             </div>
                         </div>
                     </div>
