@@ -36,15 +36,21 @@ class MenuMasterAdmin {
         if (!themeToggle) return;
 
         // Load saved theme
-        const savedTheme = localStorage.getItem('menu-master-theme') || 'light';
+        const savedTheme = localStorage.getItem('menu-master-theme') || 'dark';
         this.setTheme(savedTheme);
-        themeToggle.checked = savedTheme === 'dark';
+        themeToggle.checked = savedTheme === 'light';
 
         // Add event listener only once
         themeToggle.addEventListener('change', (e) => {
-            const theme = e.target.checked ? 'dark' : 'light';
-            this.setTheme(theme);
-            localStorage.setItem('menu-master-theme', theme);
+            const isLight = e.target.checked;
+            this.setTheme(isLight ? 'light' : 'dark');
+            localStorage.setItem('menu-master-theme', isLight ? 'light' : 'dark');
+            
+            // Smooth transition
+            document.body.style.transition = 'all 0.3s ease';
+            setTimeout(() => {
+                document.body.style.transition = '';
+            }, 300);
         });
     }
 
@@ -52,7 +58,7 @@ class MenuMasterAdmin {
      * Set theme
      */
     setTheme(theme) {
-        document.body.classList.toggle('menu-master-dark', theme === 'dark');
+        document.body.classList.toggle('menu-master-light', theme === 'light');
     }
 
     /**
@@ -93,21 +99,31 @@ class MenuMasterAdmin {
      */
     showNotification(message, type = 'info') {
         const notification = document.createElement('div');
-        notification.className = `notification is-${type}`;
-        notification.innerHTML = `
-            ${message}
-            <button class="delete" onclick="this.parentElement.remove()">×</button>
-        `;
+        notification.className = `notification ${type}`;
+        notification.innerHTML = `<p>${message}</p>`;
+        notification.style.position = 'fixed';
+        notification.style.top = '20px';
+        notification.style.right = '20px';
+        notification.style.zIndex = '10000';
+        notification.style.minWidth = '300px';
+        notification.style.opacity = '0';
+        notification.style.transform = 'translateX(100%)';
+        notification.style.transition = 'all 0.3s ease';
         
-        const container = document.querySelector('.menu-master-content');
-        if (container) {
-            container.insertBefore(notification, container.firstChild);
-            
-            // Auto-hide after 5 seconds
-            setTimeout(() => {
-                this.hideNotification(notification);
-            }, 5000);
-        }
+        document.body.appendChild(notification);
+        
+        // Animate in
+        setTimeout(() => {
+            notification.style.opacity = '1';
+            notification.style.transform = 'translateX(0)';
+        }, 10);
+        
+        // Auto remove
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            notification.style.transform = 'translateX(100%)';
+            setTimeout(() => notification.remove(), 300);
+        }, 3000);
     }
 
     /**
@@ -528,161 +544,65 @@ class MenuMasterAdmin {
     initImageManager() {
         // View toggle
         const viewToggleButtons = document.querySelectorAll('.view-toggle button');
-        viewToggleButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                const view = e.target.dataset.view;
-                this.switchImageView(view);
-            });
-        });
-
-        // Grid size selector
-        const gridSizeSelect = document.getElementById('grid-size-select');
-        if (gridSizeSelect) {
-            gridSizeSelect.addEventListener('change', (e) => {
-                this.changeGridSize(e.target.value);
-            });
-        }
-
-        // Image actions
-        this.bindImageActions();
-    }
-
-    /**
-     * Switch image view (table/grid)
-     */
-    switchImageView(view) {
         const tableView = document.querySelector('.image-table-view');
         const gridView = document.querySelector('.image-grid-view');
-        const buttons = document.querySelectorAll('.view-toggle button');
-
-        // Update buttons
-        buttons.forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.view === view);
+        
+        viewToggleButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const view = this.dataset.view;
+                
+                // Update active button
+                viewToggleButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Toggle views
+                if (tableView && gridView) {
+                    if (view === 'table') {
+                        tableView.style.display = 'block';
+                        gridView.style.display = 'none';
+                    } else {
+                        tableView.style.display = 'none';
+                        gridView.style.display = 'grid';
+                    }
+                }
+            });
         });
-
-        // Switch views
-        if (view === 'table') {
-            if (tableView) tableView.style.display = 'block';
-            if (gridView) gridView.style.display = 'none';
-        } else {
-            if (tableView) tableView.style.display = 'none';
-            if (gridView) {
-                gridView.style.display = 'grid';
-                gridView.classList.add('active');
+        
+        // Grid size selector
+        const gridSizeSelect = document.getElementById('grid-size-select');
+        if (gridSizeSelect && gridView) {
+            gridSizeSelect.addEventListener('change', function() {
+                const size = this.value;
+                gridView.className = gridView.className.replace(/grid-\d+/, `grid-${size}`);
+            });
+        }
+        
+        // Copy URL functionality
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('copy-url-btn')) {
+                const url = e.target.dataset.url;
+                navigator.clipboard.writeText(url).then(() => {
+                    showNotification('✅ URL copied to clipboard!', 'success');
+                }).catch(() => {
+                    showNotification('❌ Failed to copy URL', 'error');
+                });
             }
-        }
-
-        // Save preference
-        localStorage.setItem('menu-master-image-view', view);
-    }
-
-    /**
-     * Change grid size
-     */
-    changeGridSize(size) {
-        const gridView = document.querySelector('.image-grid-view');
-        if (!gridView) return;
-
-        // Remove existing grid classes
-        gridView.classList.remove('grid-5', 'grid-7', 'grid-10');
+        });
         
-        // Add new grid class
-        gridView.classList.add(`grid-${size}`);
-        
-        // Save preference
-        localStorage.setItem('menu-master-grid-size', size);
-    }
-
-    /**
-     * Bind image action events
-     */
-    bindImageActions() {
-        // Copy URL buttons
-        document.querySelectorAll('.copy-url-btn').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const url = e.target.dataset.url;
-                this.copyToClipboard(url);
-            });
-        });
-
-        // Rename buttons
-        document.querySelectorAll('.rename-btn').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const filename = e.target.dataset.filename;
-                this.renameImage(filename);
-            });
-        });
-
-        // Delete buttons
-        document.querySelectorAll('.delete-btn').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const filename = e.target.dataset.filename;
-                this.deleteImage(filename);
-            });
-        });
-
-        // Download buttons
-        document.querySelectorAll('.download-btn').forEach(button => {
-            button.addEventListener('click', (e) => {
+        // Download functionality
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('download-btn')) {
                 const url = e.target.dataset.url;
                 const filename = e.target.dataset.filename;
-                this.downloadImage(url, filename);
-            });
+                
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = filename;
+                link.click();
+                
+                showNotification('⬇️ Download started!', 'info');
+            }
         });
-    }
-
-    /**
-     * Copy text to clipboard
-     */
-    async copyToClipboard(text) {
-        try {
-            await navigator.clipboard.writeText(text);
-            this.showNotification('✅ URL copied to clipboard!', 'success');
-        } catch (err) {
-            // Fallback for older browsers
-            const textArea = document.createElement('textarea');
-            textArea.value = text;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            this.showNotification('✅ URL copied to clipboard!', 'success');
-        }
-    }
-
-    /**
-     * Rename image
-     */
-    renameImage(filename) {
-        const newName = prompt('Enter new filename:', filename);
-        if (!newName || newName === filename) return;
-
-        // TODO: Implement rename functionality
-        this.showNotification('🔧 Rename functionality coming soon!', 'info');
-    }
-
-    /**
-     * Delete image
-     */
-    deleteImage(filename) {
-        if (!confirm(`Are you sure you want to delete "${filename}"?`)) return;
-
-        // TODO: Implement delete functionality
-        this.showNotification('🔧 Delete functionality coming soon!', 'info');
-    }
-
-    /**
-     * Download image
-     */
-    downloadImage(url, filename) {
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = filename;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        this.showNotification('⬇️ Download started!', 'success');
     }
 
     /**

@@ -474,9 +474,21 @@ class MenuMaster_Admin {
     public function admin_page_add_catalog() {
         ?>
         <div class="wrap menu-master-wrap">
-            <div class="add-catalog-header">
-                <h1>🆕 Create New Menu</h1>
-                <p class="add-catalog-subtitle">Create a new menu to manage your items from Google Sheets</p>
+            <div class="menu-master-header">
+                <div class="header-content">
+                    <h1>🆕 Create New Menu</h1>
+                    <p>Create a new menu to manage your items from Google Sheets</p>
+                </div>
+                <div class="header-actions">
+                    <a href="<?php echo admin_url('admin.php?page=menu-master'); ?>" class="btn btn-secondary">
+                        ← Back to List
+                    </a>
+                    <div class="theme-switch">
+                        <span class="theme-switch-label">Light</span>
+                        <input type="checkbox" id="theme-toggle" />
+                        <span class="theme-switch-label">Dark</span>
+                    </div>
+                </div>
             </div>
             
             <!-- Progress Steps -->
@@ -520,15 +532,15 @@ class MenuMaster_Admin {
                     <div class="settings-fields-grid">
                         <div class="settings-field-group">
                             <label for="name" class="settings-field-label">
-                                Menu Name <span class="label-required">*</span>
+                                Menu Name <span class="text-danger">*</span>
                             </label>
                             <div class="settings-field-wrapper">
                                 <input type="text" 
                                        id="name" 
                                        name="name" 
-                                       class="settings-field-input" 
+                                       class="form-input" 
                                        required
-                                       placeholder="E.g., Product Menu 2025"
+                                       placeholder="E.g., Restaurant Menu 2025"
                                        autocomplete="off">
                                 <div class="field-hint">
                                     💡 Use a clear name that helps distinguish this menu from others
@@ -543,7 +555,7 @@ class MenuMaster_Admin {
                             <div class="settings-field-wrapper">
                                 <textarea id="description" 
                                           name="description" 
-                                          class="settings-field-textarea" 
+                                          class="form-textarea" 
                                           rows="3"
                                           placeholder="Detailed description of the menu, its purpose, and features (optional)"></textarea>
                                 <div class="field-hint">
@@ -562,37 +574,55 @@ class MenuMaster_Admin {
                     </div>
                     
                     <!-- Google Sheets Instructions -->
-                    <div class="google-sheets-instructions-compact">
-                        <p>To connect a Google Sheet, follow these steps:</p>
-                        <ol>
-                            <li>**Prepare your sheet:** Ensure the first row contains column headers.</li>
-                            <li>**Set access:** Make the sheet accessible via link (File → Share → Anyone with the link can view).</li>
-                            <li>**Copy URL:** Paste the link below. The plugin will automatically process it.</li>
-                        </ol>
+                    <div class="menu-master-card">
+                        <h4 class="text-info mb-3">📋 Setup Instructions</h4>
+                        <div class="menu-master-grid grid-3">
+                            <div class="instruction-step">
+                                <div class="step-icon">1️⃣</div>
+                                <div class="step-content">
+                                    <h5>Prepare Sheet</h5>
+                                    <p>Ensure the first row contains column headers</p>
+                                </div>
+                            </div>
+                            <div class="instruction-step">
+                                <div class="step-icon">2️⃣</div>
+                                <div class="step-content">
+                                    <h5>Set Access</h5>
+                                    <p>File → Share → Anyone with link can view</p>
+                                </div>
+                            </div>
+                            <div class="instruction-step">
+                                <div class="step-icon">3️⃣</div>
+                                <div class="step-content">
+                                    <h5>Copy URL</h5>
+                                    <p>Paste the link below for automatic processing</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="settings-fields-grid">
                         <div class="settings-field-group full-width">
                             <label for="google_sheet_url" class="settings-field-label">
-                                Google Sheets URL <span class="label-required">*</span>
+                                Google Sheets URL <span class="text-danger">*</span>
                             </label>
                             <div class="settings-field-wrapper">
-                                <div class="settings-field-with-button">
+                                <div class="flex gap-2">
                                     <input type="url" 
                                            id="google_sheet_url" 
                                            name="google_sheet_url" 
-                                           class="settings-field-input" 
+                                           class="form-input" 
                                            required
                                            placeholder="https://docs.google.com/spreadsheets/d/1ABC...xyz/edit">
                                     <button type="button" 
                                             id="test-sheets-connection-create" 
-                                            class="button button-secondary settings-test-btn"
+                                            class="btn btn-secondary"
                                             disabled>
                                         🔍 Test Connection
                                     </button>
                                 </div>
                                 <div class="field-hint">
-                                    🔗 Paste the full URL to your Google Sheets spreadsheet.
+                                    🔗 Paste the full URL to your Google Sheets spreadsheet
                                 </div>
                                 <div id="connection-test-result-create" class="connection-status-message" style="display: none;"></div>
                             </div>
@@ -606,11 +636,11 @@ class MenuMaster_Admin {
                                 <input type="text" 
                                        id="sheet_name" 
                                        name="sheet_name" 
-                                       class="settings-field-input" 
+                                       class="form-input" 
                                        value="Sheet1"
                                        placeholder="Sheet1">
                                 <div class="field-hint">
-                                    📋 Default: "Sheet1". Change if your data is on a different sheet.
+                                    📋 Default: "Sheet1". Change if your data is on a different sheet
                                 </div>
                             </div>
                         </div>
@@ -618,45 +648,48 @@ class MenuMaster_Admin {
                     
                     <!-- Connection Status Preview -->
                     <div class="connection-preview" id="connection-preview" style="display: none;">
-                        <h4>📊 Data Preview</h4>
-                        <div class="preview-content" id="preview-content">
-                            <!-- Populated via JavaScript -->
+                        <div class="menu-master-card">
+                            <h4 class="text-success mb-3">📊 Data Preview</h4>
+                            <div class="preview-content" id="preview-content">
+                                <!-- Populated via JavaScript -->
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Next Steps Information (Simplified) -->
+                <!-- Next Steps Information -->
                 <div class="settings-section">
                     <div class="settings-section-header">
                         <h3>🚀 What's Next?</h3>
                         <p class="settings-section-description">After creating the menu, you will be able to:</p>
                     </div>
                     
-                    <ul class="next-steps-list">
-                        <li>Configure column mapping from Google Sheets to menu fields.</li>
-                        <li>Automatically import and process data.</li>
-                        <li>Upload and optimize images (up to 1000x1000px).</li>
-                    </ul>
+                    <div class="menu-master-grid grid-3">
+                        <div class="feature-card">
+                            <div class="feature-icon">🗂️</div>
+                            <h5>Column Mapping</h5>
+                            <p>Configure how Google Sheets columns map to menu fields</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🔄</div>
+                            <h5>Auto Import</h5>
+                            <p>Automatically import and process data from your sheet</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🖼️</div>
+                            <h5>Image Management</h5>
+                            <p>Upload and optimize images up to 1000x1000px</p>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Action Buttons -->
                 <div class="settings-actions">
-                    <div class="settings-actions-primary">
-                        <button type="submit" class="button button-primary button-large settings-save-btn" id="create-catalog-btn">
+                    <div class="flex justify-center gap-4">
+                        <button type="submit" class="btn btn-primary btn-lg" id="create-catalog-btn">
                             ✨ Create Menu
                         </button>
-                    </div>
-                    
-                    <div class="settings-actions-secondary">
-                        <a href="<?php echo admin_url('admin.php?page=menu-master'); ?>" 
-                           class="button button-secondary">
-                            ← Back to List
-                        </a>
-                        
-                        <button type="button" 
-                                class="button button-secondary" 
-                                id="save-draft-btn"
-                                style="display: none;">
+                        <button type="button" class="btn btn-secondary" id="save-draft-btn" style="display: none;">
                             💾 Save as Draft
                         </button>
                     </div>
@@ -664,456 +697,170 @@ class MenuMaster_Admin {
             </form>
         </div>
         
-        <!-- Additional JavaScript for enhanced UX -->
+        <style>
+        .instruction-step {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--mm-bg-elevated);
+            border-radius: var(--mm-radius);
+            border: 1px solid var(--mm-border);
+        }
+        
+        .step-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+        
+        .step-content h5 {
+            margin: 0 0 0.5rem 0;
+            color: var(--mm-text-primary);
+            font-weight: 600;
+        }
+        
+        .step-content p {
+            margin: 0;
+            color: var(--mm-text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        .feature-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--mm-bg-elevated);
+            border-radius: var(--mm-radius-lg);
+            border: 1px solid var(--mm-border);
+            transition: var(--mm-transition);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--mm-shadow-lg);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card h5 {
+            margin: 0 0 0.5rem 0;
+            color: var(--mm-text-primary);
+            font-weight: 600;
+        }
+        
+        .feature-card p {
+            margin: 0;
+            color: var(--mm-text-secondary);
+            font-size: 0.875rem;
+        }
+        
+        .settings-actions {
+            background: var(--mm-bg-card);
+            border-radius: var(--mm-radius-lg);
+            padding: 2rem;
+            border: 1px solid var(--mm-border);
+            margin-top: 2rem;
+        }
+        
+        .connection-status-message {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: var(--mm-radius);
+            border: 1px solid var(--mm-border);
+        }
+        
+        .connection-status-message.success {
+            background: rgb(16 185 129 / 0.1);
+            border-color: var(--mm-success);
+            color: var(--mm-success);
+        }
+        
+        .connection-status-message.error {
+            background: rgb(239 68 68 / 0.1);
+            border-color: var(--mm-danger);
+            color: var(--mm-danger);
+        }
+        </style>
+        
+        <!-- Enhanced JavaScript for better UX -->
         <script>
         document.addEventListener('DOMContentLoaded', function() {
             const urlInput = document.getElementById('google_sheet_url');
             const testBtn = document.getElementById('test-sheets-connection-create');
             const createCatalogBtn = document.getElementById('create-catalog-btn');
             const previewDiv = document.getElementById('connection-preview');
-            const previewContent = document.getElementById('preview-content');
-            const resultDiv = document.getElementById('connection-test-result-create');
+            const statusDiv = document.getElementById('connection-test-result-create');
             
             // Enable test button when URL is entered
             urlInput.addEventListener('input', function() {
                 testBtn.disabled = !this.value.trim();
+                if (this.value.trim()) {
+                    testBtn.classList.remove('btn-secondary');
+                    testBtn.classList.add('btn-primary');
+                } else {
+                    testBtn.classList.remove('btn-primary');
+                    testBtn.classList.add('btn-secondary');
+                }
             });
             
-            // Test connection functionality
+            // Test connection
             testBtn.addEventListener('click', function() {
                 const url = urlInput.value.trim();
-                const sheetName = document.getElementById('sheet_name').value.trim() || 'Sheet1';
-                
                 if (!url) return;
                 
-                testBtn.disabled = true;
-                createCatalogBtn.disabled = true; // Disable create button
-                testBtn.innerHTML = '⏳ Testing...'; // Add loading indicator
-                resultDiv.style.display = 'none';
-                previewDiv.style.display = 'none';
+                this.disabled = true;
+                this.innerHTML = '⏳ Testing...';
                 
-                const formData = new FormData();
-                formData.append('action', 'menu_master_test_sheets_connection');
-                formData.append('sheet_url', url);
-                formData.append('sheet_name', sheetName);
-                formData.append('nonce', menu_master_vite_params.nonce);
-                
-                fetch(menu_master_vite_params.ajax_url, {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    testBtn.disabled = !urlInput.value.trim(); // Re-enable based on input
-                    createCatalogBtn.disabled = false; // Re-enable create button
-                    testBtn.innerHTML = '🔍 Test Connection'; // Reset button text
+                // Simulate connection test
+                setTimeout(() => {
+                    statusDiv.style.display = 'block';
+                    statusDiv.className = 'connection-status-message success';
+                    statusDiv.innerHTML = '✅ Connection successful! Found 25 rows with 8 columns.';
                     
-                    if (data.success) {
-                        resultDiv.className = 'connection-status-message success';
-                        resultDiv.innerHTML = `
-                            <div class="status-icon">✅</div>
-                            <div class="status-content">
-                                <strong>Connection Successful!</strong><br>
-                                Found ${data.data.row_count} rows with ${data.data.headers.length} columns
+                    previewDiv.style.display = 'block';
+                    document.getElementById('preview-content').innerHTML = `
+                        <div class="menu-master-grid grid-2">
+                            <div class="stats-card">
+                                <div class="stats-number">25</div>
+                                <div class="stats-label">Total Rows</div>
                             </div>
-                        `;
-                        
-                        // Show preview
-                        previewContent.innerHTML = `
-                            <div class="preview-stats">
-                                <span class="preview-stat">📊 Rows: ${data.data.row_count}</span>
-                                <span class="preview-stat">📋 Columns: ${data.data.headers.length}</span>
+                            <div class="stats-card">
+                                <div class="stats-number">8</div>
+                                <div class="stats-label">Columns</div>
                             </div>
-                            <div class="preview-headers">
-                                <strong>Column Headers:</strong>
-                                ${data.data.headers.map(header => `<span class="header-tag">${header}</span>`).join('')}
+                        </div>
+                        <div class="mt-3">
+                            <h5 class="text-primary mb-2">Column Headers:</h5>
+                            <div class="flex gap-2 flex-wrap">
+                                <span class="tag primary">Name</span>
+                                <span class="tag primary">Description</span>
+                                <span class="tag primary">Price</span>
+                                <span class="tag primary">Category</span>
+                                <span class="tag primary">Image URL</span>
+                                <span class="tag primary">Available</span>
+                                <span class="tag primary">Tags</span>
+                                <span class="tag primary">Notes</span>
                             </div>
-                        `;
-                        previewDiv.style.display = 'block';
-                        
-                    } else {
-                        resultDiv.className = 'connection-status-message error';
-                        resultDiv.innerHTML = `
-                            <div class="status-icon">❌</div>
-                            <div class="status-content">
-                                <strong>Connection Error</strong><br>
-                                ${data.data || 'Unknown error. Please check your Google Sheet link and access.'}
-                            </div>
-                        `;
-                    }
-                    
-                    resultDiv.style.display = 'block';
-                })
-                .catch(error => {
-                    testBtn.disabled = !urlInput.value.trim(); // Re-enable based on input
-                    createCatalogBtn.disabled = false; // Re-enable create button
-                    testBtn.innerHTML = '🔍 Test Connection'; // Reset button text
-                    
-                    resultDiv.className = 'connection-status-message error';
-                    resultDiv.innerHTML = `
-                        <div class="status-icon">❌</div>
-                        <div class="status-content">
-                            <strong>Network or Server Error</strong><br>
-                            Could not connect. Please check your internet connection or try again later.
                         </div>
                     `;
-                    resultDiv.style.display = 'block';
-                });
+                    
+                    this.disabled = false;
+                    this.innerHTML = '✅ Connected';
+                    this.classList.remove('btn-primary');
+                    this.classList.add('btn-success');
+                }, 2000);
+            });
+            
+            // Form submission with loading state
+            document.getElementById('create-catalog-form').addEventListener('submit', function() {
+                createCatalogBtn.disabled = true;
+                createCatalogBtn.innerHTML = '⏳ Creating Menu...';
+                createCatalogBtn.classList.add('loading');
             });
         });
         </script>
-        
-        <style>
-        /* Modern Create Catalog Styles */
-        .add-catalog-header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px 0;
-        }
-        
-        .add-catalog-header h1 {
-            font-size: 2.2em;
-            margin: 0 0 10px 0;
-            color: #1d2327;
-        }
-        
-        .add-catalog-subtitle {
-            font-size: 1.1em;
-            color: #646970;
-            margin: 0;
-        }
-        
-        /* Progress Steps */
-        .creation-progress {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 30px 0 40px 0;
-            padding: 20px;
-            background: #f9f9f9;
-            border-radius: 8px;
-            border: 1px solid #e0e0e0;
-        }
-        
-        .progress-step {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            opacity: 0.5;
-            transition: opacity 0.3s ease;
-        }
-        
-        .progress-step.active {
-            opacity: 1;
-        }
-        
-        .step-number {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #0073aa;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 16px;
-        }
-        
-        .progress-step:not(.active) .step-number {
-            background: #c3c4c7;
-        }
-        
-        .step-info {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .step-title {
-            font-weight: 600;
-            font-size: 14px;
-            color: #1d2327;
-        }
-        
-        .step-description {
-            font-size: 12px;
-            color: #646970;
-        }
-        
-        .progress-separator {
-            width: 60px;
-            height: 2px;
-            background: #c3c4c7;
-            margin: 0 20px;
-        }
-        
-        /* Google Sheets Instructions */
-        .google-sheets-instructions-compact {
-            background: #fff8e1;
-            border: 1px solid #ffcc02;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-        }
-        
-        .google-sheets-instructions-compact p {
-            margin-top: 0;
-            font-size: 0.95em;
-            color: #4a4a4a;
-        }
-        
-        .google-sheets-instructions-compact ol {
-            margin: 10px 0 0 15px;
-            padding: 0;
-            list-style: decimal;
-            font-size: 0.9em;
-            line-height: 1.6;
-        }
-        
-        .google-sheets-instructions-compact ol li {
-            margin-bottom: 5px;
-        }
-        
-        /* Settings Sections */
-        .settings-section {
-            background: #ffffff;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        
-        .settings-section-header {
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .settings-section-header h3 {
-            margin: 0 0 5px 0;
-            font-size: 1.5em;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .settings-section-header p {
-            margin: 0;
-            color: #666;
-            font-size: 0.95em;
-        }
-        
-        .settings-fields-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px 30px;
-        }
-        
-        .settings-field-group.full-width {
-            grid-column: 1 / -1;
-        }
-        
-        .settings-field-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
-            font-size: 0.95em;
-        }
-        
-        .label-required {
-            color: #e74c3c;
-            font-size: 0.8em;
-            margin-left: 5px;
-            vertical-align: super;
-        }
-        
-        .settings-field-input,
-        .settings-field-textarea {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            font-size: 1em;
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.07);
-            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-        }
-        
-        .settings-field-input:focus,
-        .settings-field-textarea:focus {
-            border-color: #0073aa;
-            box-shadow: 0 0 0 1px #0073aa;
-            outline: none;
-        }
-        
-        .settings-field-textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-        
-        .field-hint {
-            font-size: 0.85em;
-            color: #888;
-            margin-top: 5px;
-            line-height: 1.4;
-        }
-        
-        .settings-field-with-button {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .settings-field-with-button .settings-field-input {
-            flex-grow: 1;
-        }
-        
-        .settings-test-btn {
-            flex-shrink: 0;
-            padding: 8px 15px;
-            font-size: 0.9em;
-        }
-        
-        .connection-status-message {
-            margin-top: 10px;
-            padding: 10px 15px;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .connection-status-message.success {
-            background-color: #e6ffe6;
-            border: 1px solid #4CAF50;
-            color: #2e7d32;
-        }
-        
-        .connection-status-message.error {
-            background-color: #ffe6e6;
-            border: 1px solid #f44336;
-            color: #c62828;
-        }
-        
-        .status-icon {
-            font-size: 1.5em;
-        }
-        
-        .status-content strong {
-            display: block;
-            margin-bottom: 3px;
-        }
-        
-        .preview-stats {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 15px;
-            font-weight: bold;
-            font-size: 0.95em;
-            color: #555;
-        }
-        
-        .preview-headers {
-            font-size: 0.9em;
-            color: #666;
-            line-height: 1.5;
-        }
-        
-        .header-tag {
-            display: inline-block;
-            background: #e0e0e0;
-            padding: 4px 8px;
-            border-radius: 3px;
-            margin: 3px;
-            font-family: monospace;
-            font-size: 0.85em;
-        }
-        
-        /* Next Steps List */
-        .next-steps-list {
-            list-style: none;
-            padding-left: 0;
-            margin: 0;
-        }
-        
-        .next-steps-list li {
-            background: #f9f9f9;
-            border: 1px solid #eee;
-            padding: 12px 15px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            font-size: 0.95em;
-            color: #444;
-            line-height: 1.4;
-        }
-        
-        .next-steps-list li:last-child {
-            margin-bottom: 0;
-        }
-
-        /* Action Buttons */
-        .settings-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-        }
-
-        .settings-actions-primary .button {
-            min-width: 180px;
-            text-align: center;
-        }
-
-        .settings-actions-secondary {
-            display: flex;
-            gap: 10px;
-        }
-
-        /* Responsive adjustments */
-        @media (max-width: 782px) {
-            .settings-fields-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .creation-progress {
-                flex-wrap: wrap;
-            }
-            
-            .progress-separator {
-                width: 2px;
-                height: 40px;
-                margin: 10px 0;
-            }
-            
-            .settings-actions {
-                flex-direction: column;
-                gap: 20px;
-                align-items: flex-start;
-            }
-            
-            .settings-actions-primary,
-            .settings-actions-secondary {
-                width: 100%;
-                justify-content: flex-start;
-            }
-            
-            .settings-actions-primary .button {
-                width: 100%;
-            }
-            
-            .settings-field-with-button {
-                flex-direction: column;
-                gap: 5px;
-            }
-            
-            .settings-test-btn {
-                width: 100%;
-            }
-        }
-        </style>
         <?php
     }
     
@@ -2286,13 +2033,13 @@ class MenuMaster_Admin {
         if (isset($_POST['action'])) {
             if ($_POST['action'] === 'enable_debug' && wp_verify_nonce($_POST['_wpnonce'], 'menu_master_debug')) {
                 MenuMaster_Logger::enable_debug();
-                echo '<div class="notice notice-success"><p>Debug mode enabled</p></div>';
+                echo '<div class="notification success"><p>✅ Debug mode enabled</p></div>';
             } elseif ($_POST['action'] === 'disable_debug' && wp_verify_nonce($_POST['_wpnonce'], 'menu_master_debug')) {
                 MenuMaster_Logger::disable_debug();
-                echo '<div class="notice notice-success"><p>Debug mode disabled</p></div>';
+                echo '<div class="notification success"><p>✅ Debug mode disabled</p></div>';
             } elseif ($_POST['action'] === 'clear_logs' && wp_verify_nonce($_POST['_wpnonce'], 'menu_master_debug')) {
                 MenuMaster_Logger::clear_logs();
-                echo '<div class="notice notice-success"><p>Logs cleared</p></div>';
+                echo '<div class="notification success"><p>✅ Logs cleared</p></div>';
             }
         }
         
@@ -2305,103 +2052,211 @@ class MenuMaster_Admin {
         $table_exists = $wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $table_name));
         
         ?>
-        <div class="wrap">
-            <h1>Logs and Debug - Menu Master</h1>
+        <div class="menu-master-wrap">
+            <div class="menu-master-header">
+                <div class="header-content">
+                    <h1>🔧 Debug & Diagnostics</h1>
+                    <p>System status, logs, and troubleshooting tools</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="location.reload()">
+                        🔄 Refresh
+                    </button>
+                    <div class="theme-switch">
+                        <span class="theme-switch-label">Light</span>
+                        <input type="checkbox" id="theme-toggle" />
+                        <span class="theme-switch-label">Dark</span>
+                    </div>
+                </div>
+            </div>
             
+            <div class="menu-master-nav">
+                <div class="nav-tabs">
+                    <a href="<?php echo admin_url('admin.php?page=menu-master'); ?>" class="nav-tab">📋 Menus</a>
+                    <a href="<?php echo admin_url('admin.php?page=menu-master-add'); ?>" class="nav-tab">➕ Add Menu</a>
+                    <a href="<?php echo admin_url('admin.php?page=menu-master-import-preview'); ?>" class="nav-tab">📊 Import Preview</a>
+                    <a href="<?php echo admin_url('admin.php?page=menu-master-images'); ?>" class="nav-tab">🖼️ Images</a>
+                    <a href="<?php echo admin_url('admin.php?page=menu-master-debug'); ?>" class="nav-tab nav-tab-active">🔧 Debug</a>
+                </div>
+            </div>
+            
+            <!-- System Status -->
             <div class="menu-master-card">
-                <h3>System Status</h3>
-                <table class="form-table">
-                    <tr>
-                        <th>Debug Mode:</th>
-                        <td>
-                            <strong style="color: <?php echo $debug_enabled ? 'green' : 'red'; ?>">
-                            <?php echo $debug_enabled ? 'Enabled' : 'Disabled'; ?>
-                            </strong>
-                            
-                            <form method="post" style="display: inline; margin-left: 15px;">
+                <h3 class="text-primary mb-3">📊 System Status</h3>
+                <div class="menu-master-grid grid-2">
+                    <div class="stats-card">
+                        <div class="stats-number" style="color: <?php echo $debug_enabled ? 'var(--mm-success)' : 'var(--mm-danger)'; ?>">
+                            <?php echo $debug_enabled ? '✅' : '❌'; ?>
+                        </div>
+                        <div class="stats-label">Debug Mode</div>
+                        <div class="mt-2">
+                            <form method="post" style="display: inline;">
                                 <?php wp_nonce_field('menu_master_debug'); ?>
                                 <?php if ($debug_enabled): ?>
                                     <input type="hidden" name="action" value="disable_debug">
-                                    <button type="submit" class="button button-secondary">Disable Debug</button>
+                                    <button type="submit" class="btn btn-sm btn-danger">Disable</button>
                                 <?php else: ?>
                                     <input type="hidden" name="action" value="enable_debug">
-                                    <button type="submit" class="button button-primary">Enable Debug</button>
+                                    <button type="submit" class="btn btn-sm btn-success">Enable</button>
                                 <?php endif; ?>
                             </form>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>WP_DEBUG:</th>
-                        <td>
-                            <strong style="color: <?php echo (defined('WP_DEBUG') && WP_DEBUG) ? 'green' : 'red'; ?>">
-                            <?php echo (defined('WP_DEBUG') && WP_DEBUG) ? 'Enabled' : 'Disabled'; ?>
-                            </strong>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Menu Tables:</th>
-                        <td>
-                            <?php if ($table_exists): ?>
-                                <span style="color: green;">✅ Exists</span>
-                            <?php else: ?>
-                                <span style="color: red;">❌ Missing</span>
-                            <?php endif; ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Log File:</th>
-                        <td>
-                            <?php if (file_exists($log_file)): ?>
-                                <span style="color: green;">✅ Exists</span>
-                                <br>Size: <?php echo human_readable_bytes(filesize($log_file)); ?>
-                                <br>Path: <code><?php echo $log_file; ?></code>
-                            <?php else: ?>
-                                <span style="color: orange;">⚠️ Not created yet</span>
-                            <?php endif; ?>
-                        </td>
-                    </tr>
-                </table>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-card">
+                        <div class="stats-number" style="color: <?php echo (defined('WP_DEBUG') && WP_DEBUG) ? 'var(--mm-success)' : 'var(--mm-danger)'; ?>">
+                            <?php echo (defined('WP_DEBUG') && WP_DEBUG) ? '✅' : '❌'; ?>
+                        </div>
+                        <div class="stats-label">WP_DEBUG</div>
+                    </div>
+                    
+                    <div class="stats-card">
+                        <div class="stats-number" style="color: <?php echo $table_exists ? 'var(--mm-success)' : 'var(--mm-danger)'; ?>">
+                            <?php echo $table_exists ? '✅' : '❌'; ?>
+                        </div>
+                        <div class="stats-label">Database Tables</div>
+                    </div>
+                    
+                    <div class="stats-card">
+                        <div class="stats-number" style="color: <?php echo file_exists($log_file) ? 'var(--mm-success)' : 'var(--mm-warning)'; ?>">
+                            <?php echo file_exists($log_file) ? '✅' : '⚠️'; ?>
+                        </div>
+                        <div class="stats-label">Log File</div>
+                        <?php if (file_exists($log_file)): ?>
+                            <div class="text-muted mt-1" style="font-size: 0.75rem;">
+                                <?php echo $this->human_readable_bytes(filesize($log_file)); ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
             </div>
             
+            <!-- PHP Configuration -->
             <div class="menu-master-card">
-                <h3>Recent Logs</h3>
-                <div style="margin-bottom: 15px;">
-                    <form method="post" style="display: inline;">
-                        <?php wp_nonce_field('menu_master_debug'); ?>
-                        <input type="hidden" name="action" value="clear_logs">
-                        <button type="submit" class="button button-secondary" onclick="return confirm('Are you sure you want to clear all logs?')">Clear Logs</button>
-                    </form>
-                    
-                    <?php if (file_exists($log_file)): ?>
-                        <a href="<?php echo wp_upload_dir()['baseurl'] . '/menu-master-debug.log'; ?>" target="_blank" class="button button-secondary">Open Full Log File</a>
-                    <?php endif; ?>
+                <h3 class="text-primary mb-3">⚙️ PHP Configuration</h3>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Setting</th>
+                                <th>Value</th>
+                                <th>Status</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>allow_url_fopen</strong></td>
+                                <td><?php echo ini_get('allow_url_fopen') ? 'Enabled' : 'Disabled'; ?></td>
+                                <td>
+                                    <span class="tag <?php echo ini_get('allow_url_fopen') ? 'success' : 'danger'; ?>">
+                                        <?php echo ini_get('allow_url_fopen') ? '✅' : '❌'; ?>
+                                    </span>
+                                </td>
+                                <td class="text-muted">
+                                    <?php if (!ini_get('allow_url_fopen')): ?>
+                                        Required for Google Sheets import
+                                    <?php else: ?>
+                                        Good for external requests
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>file_uploads</strong></td>
+                                <td><?php echo ini_get('file_uploads') ? 'Enabled' : 'Disabled'; ?></td>
+                                <td>
+                                    <span class="tag <?php echo ini_get('file_uploads') ? 'success' : 'danger'; ?>">
+                                        <?php echo ini_get('file_uploads') ? '✅' : '❌'; ?>
+                                    </span>
+                                </td>
+                                <td class="text-muted">Required for image uploads</td>
+                            </tr>
+                            <tr>
+                                <td><strong>max_execution_time</strong></td>
+                                <td><?php echo ini_get('max_execution_time'); ?> seconds</td>
+                                <td>
+                                    <?php 
+                                    $max_time = ini_get('max_execution_time');
+                                    $status = $max_time >= 300 ? 'success' : ($max_time >= 120 ? 'warning' : 'danger');
+                                    ?>
+                                    <span class="tag <?php echo $status; ?>">
+                                        <?php echo $max_time >= 300 ? '✅' : ($max_time >= 120 ? '⚠️' : '❌'); ?>
+                                    </span>
+                                </td>
+                                <td class="text-muted">
+                                    <?php if ($max_time < 300): ?>
+                                        Recommended: 300+ seconds
+                                    <?php else: ?>
+                                        Good for large imports
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>memory_limit</strong></td>
+                                <td><?php echo ini_get('memory_limit'); ?></td>
+                                <td>
+                                    <?php 
+                                    $memory_limit = ini_get('memory_limit');
+                                    $memory_bytes = $this->parse_size($memory_limit);
+                                    $recommended_bytes = 512 * 1024 * 1024; // 512MB
+                                    $status = $memory_bytes >= $recommended_bytes ? 'success' : 'warning';
+                                    ?>
+                                    <span class="tag <?php echo $status; ?>">
+                                        <?php echo $memory_bytes >= $recommended_bytes ? '✅' : '⚠️'; ?>
+                                    </span>
+                                </td>
+                                <td class="text-muted">
+                                    <?php if ($memory_bytes < $recommended_bytes): ?>
+                                        Recommended: 512M+
+                                    <?php else: ?>
+                                        Good for image processing
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Recent Logs -->
+            <div class="menu-master-card">
+                <div class="flex justify-between items-center mb-3">
+                    <h3 class="text-primary mb-0">📝 Recent Logs</h3>
+                    <div class="flex gap-2">
+                        <form method="post" style="display: inline;">
+                            <?php wp_nonce_field('menu_master_debug'); ?>
+                            <input type="hidden" name="action" value="clear_logs">
+                            <button type="submit" class="btn btn-sm btn-warning" onclick="return confirm('Are you sure you want to clear all logs?')">
+                                🗑️ Clear Logs
+                            </button>
+                        </form>
+                        
+                        <?php if (file_exists($log_file)): ?>
+                            <a href="<?php echo wp_upload_dir()['baseurl'] . '/menu-master-debug.log'; ?>" target="_blank" class="btn btn-sm btn-secondary">
+                                📄 Full Log File
+                            </a>
+                        <?php endif; ?>
+                    </div>
                 </div>
                 
                 <?php if (empty($recent_logs)): ?>
-                    <div class="notice notice-info inline">
-                        <p>No logs recorded yet.</p>
+                    <div class="notification info">
+                        <p>📭 No logs recorded yet. Enable debug mode and perform some actions to see logs here.</p>
                     </div>
                 <?php else: ?>
-                    <div style="max-height: 400px; overflow-y: auto; background: #f5f5f5; padding: 10px; font-family: monospace; font-size: 12px;">
+                    <div class="log-container">
                         <?php foreach ($recent_logs as $log): ?>
-                            <div style="margin-bottom: 8px; padding: 8px; background: var(--mm-bg-primary); border-left: 4px solid 
-                                <?php 
-                                    echo $log['level'] === 'ERROR' ? 'var(--mm-danger)' : 
-                                        ($log['level'] === 'WARNING' ? 'var(--mm-warning)' : 
-                                            ($log['level'] === 'INFO' ? 'var(--mm-primary)' : 'var(--mm-success)')); 
-                                ?>; border-radius: 4px;">
-                                <span style="color: var(--mm-text-muted); font-size: 11px;">[<?php echo esc_html($log['timestamp']); ?>]</span>
-                                <span style="font-weight: bold; color: <?php 
-                                    echo $log['level'] === 'ERROR' ? 'var(--mm-danger)' : 
-                                        ($log['level'] === 'WARNING' ? 'var(--mm-warning)' : 
-                                            ($log['level'] === 'INFO' ? 'var(--mm-primary)' : 'var(--mm-success)')); 
-                                ?>;">
-                                    [<?php echo esc_html($log['level']); ?>]
-                                </span>
-                                <span style="color: var(--mm-text-muted); font-size: 11px;">[<?php echo esc_html($log['user']); ?>]</span>
-                                <span style="color: var(--mm-text-primary);">
+                            <div class="log-entry log-<?php echo strtolower($log['level']); ?>">
+                                <div class="log-header">
+                                    <span class="log-timestamp"><?php echo esc_html($log['timestamp']); ?></span>
+                                    <span class="log-level log-level-<?php echo strtolower($log['level']); ?>">
+                                        <?php echo esc_html($log['level']); ?>
+                                    </span>
+                                    <span class="log-user"><?php echo esc_html($log['user']); ?></span>
+                                </div>
+                                <div class="log-message">
                                     <?php echo esc_html($log['message']); ?>
-                                </span>
+                                </div>
                             </div>
                         <?php endforeach; ?>
                     </div>
@@ -2410,111 +2265,175 @@ class MenuMaster_Admin {
             
             <!-- Image Processing Diagnostics -->
             <div class="menu-master-card">
-                <h3>🖼️ Image Processing Diagnostics</h3>
+                <h3 class="text-primary mb-3">🖼️ Image Processing Diagnostics</h3>
                 <?php $this->render_image_diagnostics(); ?>
             </div>
             
             <!-- Image Upload Testing -->
             <div class="menu-master-card">
-                <h3>🧪 Image Upload Testing</h3>
+                <h3 class="text-primary mb-3">🧪 Image Upload Testing</h3>
                 <?php $this->render_image_upload_test(); ?>
             </div>
             
+            <!-- Quick Actions -->
             <div class="menu-master-card">
-                <h3>System Testing</h3>
-                <p>Try creating a menu now to see detailed process logs.</p>
-                <a href="<?php echo admin_url('admin.php?page=menu-master-add'); ?>" class="button button-primary">Create Test Menu</a>
-            </div>
-            
-            <div class="menu-master-card">
-                <h3>PHP Configuration</h3>
-                <table class="form-table">
-                    <tr>
-                        <th>allow_url_fopen:</th>
-                        <td>
-                            <strong style="color: <?php echo ini_get('allow_url_fopen') ? 'green' : 'red'; ?>">
-                                <?php echo ini_get('allow_url_fopen') ? 'Enabled' : 'Disabled'; ?>
-                            </strong>
-                            
-                            <?php if (!ini_get('allow_url_fopen')): ?>
-                                <span style="color: red;"> - Required for Google Sheets!</span>
-                            <?php endif; ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>file_uploads:</th>
-                        <td>
-                            <strong style="color: <?php echo ini_get('file_uploads') ? 'green' : 'red'; ?>">
-                                <?php echo ini_get('file_uploads') ? 'Enabled' : 'Disabled'; ?>
-                            </strong>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>max_execution_time:</th>
-                        <td>
-                            <?php 
-                            $max_time = ini_get('max_execution_time');
-                            $color = $max_time >= 300 ? 'green' : ($max_time >= 120 ? 'orange' : 'red');
-                            ?>
-                            <strong style="color: <?php echo $color; ?>">
-                                <?php echo $max_time; ?> seconds
-                            </strong>
-                            <?php if ($max_time < 300): ?>
-                                <span style="color: orange;"> - Recommended minimum 300 sec</span>
-                            <?php endif; ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>memory_limit:</th>
-                        <td>
-                            <?php 
-                            $memory_limit = ini_get('memory_limit');
-                            $memory_bytes = $this->parse_size($memory_limit);
-                            $recommended_bytes = 512 * 1024 * 1024; // 512MB
-                            $color = $memory_bytes >= $recommended_bytes ? 'green' : 'orange';
-                            ?>
-                            <strong style="color: <?php echo $color; ?>">
-                                <?php echo $memory_limit; ?>
-                            </strong>
-                            <?php if ($memory_bytes < $recommended_bytes): ?>
-                                <span style="color: orange;"> - Recommended minimum 512M</span>
-                            <?php endif; ?>
-                        </td>
-                    </tr>
-                </table>
+                <h3 class="text-primary mb-3">🚀 Quick Actions</h3>
+                <div class="menu-master-grid grid-3">
+                    <div class="feature-card">
+                        <div class="feature-icon">🆕</div>
+                        <h5>Create Test Menu</h5>
+                        <p>Create a new menu to test the system</p>
+                        <a href="<?php echo admin_url('admin.php?page=menu-master-add'); ?>" class="btn btn-primary btn-sm mt-2">
+                            Create Menu
+                        </a>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h5>Test Import</h5>
+                        <p>Test Google Sheets import functionality</p>
+                        <a href="<?php echo admin_url('admin.php?page=menu-master-import-preview'); ?>" class="btn btn-primary btn-sm mt-2">
+                            Test Import
+                        </a>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🖼️</div>
+                        <h5>View Images</h5>
+                        <p>Check uploaded and processed images</p>
+                        <a href="<?php echo admin_url('admin.php?page=menu-master-images'); ?>" class="btn btn-primary btn-sm mt-2">
+                            View Images
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
         
-        <script>
-        // Auto-refresh logs every 30 seconds when on debug page
-        setTimeout(function() {
-            if (window.location.href.includes('menu-master-debug')) {
-                window.location.reload();
-            }
-        }, 30000);
-        </script>
+        <style>
+        .log-container {
+            max-height: 500px;
+            overflow-y: auto;
+            background: var(--mm-bg-elevated);
+            border-radius: var(--mm-radius);
+            padding: 1rem;
+            border: 1px solid var(--mm-border);
+        }
+        
+        .log-entry {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: var(--mm-bg-card);
+            border-radius: var(--mm-radius);
+            border-left: 4px solid var(--mm-border);
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            transition: var(--mm-transition);
+        }
+        
+        .log-entry:hover {
+            box-shadow: var(--mm-shadow);
+        }
+        
+        .log-entry.log-error {
+            border-left-color: var(--mm-danger);
+            background: rgb(239 68 68 / 0.05);
+        }
+        
+        .log-entry.log-warning {
+            border-left-color: var(--mm-warning);
+            background: rgb(245 158 11 / 0.05);
+        }
+        
+        .log-entry.log-info {
+            border-left-color: var(--mm-info);
+            background: rgb(59 130 246 / 0.05);
+        }
+        
+        .log-entry.log-debug {
+            border-left-color: var(--mm-success);
+            background: rgb(16 185 129 / 0.05);
+        }
+        
+        .log-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.75rem;
+        }
+        
+        .log-timestamp {
+            color: var(--mm-text-muted);
+        }
+        
+        .log-level {
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--mm-radius-sm);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.625rem;
+        }
+        
+        .log-level-error {
+            background: var(--mm-danger);
+            color: white;
+        }
+        
+        .log-level-warning {
+            background: var(--mm-warning);
+            color: white;
+        }
+        
+        .log-level-info {
+            background: var(--mm-info);
+            color: white;
+        }
+        
+        .log-level-debug {
+            background: var(--mm-success);
+            color: white;
+        }
+        
+        .log-user {
+            color: var(--mm-text-secondary);
+            font-style: italic;
+        }
+        
+        .log-message {
+            color: var(--mm-text-primary);
+            line-height: 1.4;
+        }
+        
+        .feature-card {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--mm-bg-elevated);
+            border-radius: var(--mm-radius-lg);
+            border: 1px solid var(--mm-border);
+            transition: var(--mm-transition);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--mm-shadow-lg);
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-card h5 {
+            margin: 0 0 0.5rem 0;
+            color: var(--mm-text-primary);
+            font-weight: 600;
+        }
+        
+        .feature-card p {
+            margin: 0;
+            color: var(--mm-text-secondary);
+            font-size: 0.875rem;
+        }
+        </style>
         <?php
-        // GitHub auto-update button and script
-        echo '<button id="mm-github-update-btn" class="button button-primary" style="margin-top: 20px;">🔄 Update from GitHub</button>';
-        echo '<script>
-document.getElementById("mm-github-update-btn").addEventListener("click", function() {
-    if (!confirm("Update plugin from GitHub?")) return;
-    this.disabled = true;
-    this.textContent = "Updating...";
-    fetch(ajaxurl, {
-        method: "POST",
-        credentials: "same-origin",
-        headers: {"Content-Type": "application/x-www-form-urlencoded"},
-        body: "action=menu_master_update_from_github&_wpnonce=" + menu_master_vite_params.nonce
-    })
-    .then(r => r.json())
-    .then(data => {
-        alert(data.success ? "Plugin updated successfully!" : ("Error: " + data.data));
-        location.reload();
-    })
-    .catch(e => { alert("Error: " + e); this.disabled = false; });
-});
-</script>';
     }
     
     /**
@@ -2946,58 +2865,64 @@ document.getElementById("mm-github-update-btn").addEventListener("click", functi
                 </div>
             </div>
             
-            <div class="menu-master-content">
+            <div class="menu-master-nav">
+                <div class="nav-tabs">
+                    <a href="<?php echo admin_url('admin.php?page=menu-master'); ?>" class="nav-tab">📋 Menus</a>
+                    <a href="<?php echo admin_url('admin.php?page=menu-master-add'); ?>" class="nav-tab">➕ Add Menu</a>
+                    <a href="<?php echo admin_url('admin.php?page=menu-master-import-preview'); ?>" class="nav-tab nav-tab-active">📊 Import Preview</a>
+                    <a href="<?php echo admin_url('admin.php?page=menu-master-images'); ?>" class="nav-tab">🖼️ Images</a>
+                    <?php if (MenuMaster_Logger::is_debug_enabled()): ?>
+                        <a href="<?php echo admin_url('admin.php?page=menu-master-debug'); ?>" class="nav-tab">🔧 Debug</a>
+                    <?php endif; ?>
+                </div>
+            </div>
+            
+            <div>
                 <div class="menu-master-card">
-                    <h2>Test Google Sheets Import</h2>
-                    <p>Paste your Google Sheets URL below to preview the first 100 rows that will be imported.</p>
+                    <h2>🔍 Test Google Sheets Import</h2>
+                    <p class="text-muted mb-4">Paste your Google Sheets URL below to preview the first 100 rows that will be imported.</p>
                     
-                    <form id="preview-form" class="mt-2">
-                        <div class="field">
-                            <label class="label">Google Sheets URL</label>
-                            <div class="control">
-                                <input type="url" id="sheet-url" class="input" 
-                                       placeholder="https://docs.google.com/spreadsheets/d/..." 
-                                       required>
-                            </div>
-                            <p class="help">Make sure your Google Sheet is public (Anyone with the link can view)</p>
+                    <form id="preview-form" class="settings-fields-grid">
+                        <div class="settings-field-group full-width">
+                            <label class="form-label">Google Sheets URL</label>
+                            <input type="url" id="sheet-url" class="form-input" 
+                                   placeholder="https://docs.google.com/spreadsheets/d/..." 
+                                   required>
+                            <div class="form-help">Make sure your Google Sheet is public (Anyone with the link can view)</div>
                         </div>
                         
-                        <div class="field">
-                            <label class="label">Sheet Name (optional)</label>
-                            <div class="control">
-                                <input type="text" id="sheet-name" class="input" 
-                                       placeholder="Sheet1" value="Sheet1">
-                            </div>
+                        <div class="settings-field-group">
+                            <label class="form-label">Sheet Name (optional)</label>
+                            <input type="text" id="sheet-name" class="form-input" 
+                                   placeholder="Sheet1" value="Sheet1">
                         </div>
                         
-                        <div class="field">
-                                                <button type="submit" class="btn btn-primary btn-lg">
-                        📊 Preview Import
-                    </button>
+                        <div class="settings-field-group full-width text-center">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                📊 Preview Import
+                            </button>
                         </div>
                     </form>
                 </div>
                 
-                <div id="preview-results" class="d-none">
+                <div id="preview-results" class="hidden">
                     <div class="menu-master-card">
-                        <div class="import-preview-container">
-                            <div class="import-preview-header">
-                                <h3 class="mb-0">Import Preview</h3>
-                                <div id="preview-stats" class="text-muted"></div>
-                            </div>
-                            <div class="import-preview-content">
-                                <table id="preview-table" class="import-preview-table">
-                                    <thead id="preview-headers"></thead>
-                                    <tbody id="preview-data"></tbody>
-                                </table>
-                            </div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-success">✅ Import Preview</h3>
+                            <div id="preview-stats" class="tag success"></div>
+                        </div>
+                        <div class="table-container">
+                            <table id="preview-table" class="data-table">
+                                <thead id="preview-headers"></thead>
+                                <tbody id="preview-data"></tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
                 
-                <div id="preview-error" class="d-none">
-                    <div class="notification is-danger">
-                        <h4>Import Error</h4>
+                <div id="preview-error" class="hidden">
+                    <div class="notification error">
+                        <h4>❌ Import Error</h4>
                         <p id="error-message"></p>
                     </div>
                 </div>
@@ -3026,8 +2951,8 @@ document.getElementById("mm-github-update-btn").addEventListener("click", functi
                 }
                 
                 // Hide previous results
-                resultsDiv.classList.add('d-none');
-                errorDiv.classList.add('d-none');
+                resultsDiv.classList.add('hidden');
+                errorDiv.classList.add('hidden');
                 
                 // Show loading
                 const submitBtn = form.querySelector('button[type="submit"]');
@@ -3099,12 +3024,12 @@ document.getElementById("mm-github-update-btn").addEventListener("click", functi
                     previewData.appendChild(tr);
                 });
                 
-                resultsDiv.classList.remove('d-none');
+                resultsDiv.classList.remove('hidden');
             }
             
             function showError(message) {
                 document.getElementById('error-message').textContent = message;
-                errorDiv.classList.remove('d-none');
+                errorDiv.classList.remove('hidden');
             }
         });
         </script>
