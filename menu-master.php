@@ -20,7 +20,7 @@
  * @version 1.0.0
  * @author Calabalac
  * @license GPL v2 or later
- * @updated YYYY-MM-DD
+ * @updated 2024-12-19
  */
 
 // Prevent direct access
